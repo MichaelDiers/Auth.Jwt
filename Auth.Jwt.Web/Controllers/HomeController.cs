@@ -1,37 +1,25 @@
-﻿using Auth.Jwt.Web.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Auth.Jwt.Web.Controllers
+﻿namespace Auth.Jwt.Web.Controllers
 {
+    using System.Diagnostics;
+    using Auth.Jwt.Web.Models;
+    using Microsoft.AspNetCore.Mvc;
+
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            _logger = logger;
+            return this.View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier});
         }
 
         public IActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
         public IActionResult Privacy()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View();
         }
     }
 }
