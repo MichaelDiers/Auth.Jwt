@@ -1,10 +1,15 @@
 namespace Auth.Jwt.Web
 {
+    using System.Collections.Generic;
+    using System.Globalization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Localization;
+    using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
 
     public class Startup
     {
@@ -31,7 +36,8 @@ namespace Auth.Jwt.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseRequestLocalization(
+                app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
             app.UseRouting();
 
             app.UseAuthorization();
@@ -43,6 +49,18 @@ namespace Auth.Jwt.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    var cultures = new List<CultureInfo> {new CultureInfo("de"), new CultureInfo("en")};
+                    options.DefaultRequestCulture = new RequestCulture(cultures[0]);
+                    options.SupportedCultures = cultures;
+                    options.SupportedUICultures = cultures;
+                });
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
             services.AddControllersWithViews();
         }
     }
