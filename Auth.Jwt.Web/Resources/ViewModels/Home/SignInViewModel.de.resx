@@ -120,6 +120,9 @@
   <data name="Password" xml:space="preserve">
     <value>Passwort</value>
   </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
   <data name="Required" xml:space="preserve">
     <value>{0} ist ein Pflichtfeld.</value>
   </data>
@@ -127,6 +130,9 @@
     <value>{0} muss eine Länge von {1} bis {2} haben.</value>
   </data>
   <data name="UserName" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="UserNamePrompt" xml:space="preserve">
     <value>Benutzername</value>
   </data>
 </root>

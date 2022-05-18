@@ -2,6 +2,8 @@ namespace Auth.Jwt.Web
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using Auth.Jwt.Web.Contracts.Services;
+    using Auth.Jwt.Web.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Localization;
@@ -62,6 +64,8 @@ namespace Auth.Jwt.Web
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
             services.AddControllersWithViews();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }
 }

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Resources\Controllers\HomeController.en.resx" />
+    <EmbeddedResource Remove="Resources\Controllers\AuthenticateController.en.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\Controllers\HomeController.en.resx" />
+    <None Include="Resources\Controllers\AuthenticateController.en.resx" />
   </ItemGroup>
 
 </Project>

@@ -1,17 +1,16 @@
 ﻿namespace Auth.Jwt.Web.ViewModels.Home
 {
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class SignInViewModel
     {
-        [DisplayName("Password")]
+        [Display(Name = "Password", Prompt = "PasswordPrompt")]
         [DataType(DataType.Password)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Required")]
         [StringLength(100, ErrorMessage = "StringLength", MinimumLength = 4)]
         public string Password { get; set; }
 
-        [DisplayName("UserName")]
+        [Display(Name = "UserName", Prompt = "UserNamePrompt")]
         [DataType(DataType.Text)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Required")]
         [StringLength(100, ErrorMessage = "StringLength", MinimumLength = 4)]
