@@ -1,7 +1,8 @@
-﻿namespace Auth.Jwt.Web.Controllers
+﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Services;
+    using Auth.Jwt.Web.Models.Requests;
     using Auth.Jwt.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
@@ -39,8 +40,10 @@
                 return this.View(viewModel);
             }
 
-            var token = await this.authenticationService.AuthenticateAsync(viewModel.UserName, viewModel.Password);
-            if (!string.IsNullOrWhiteSpace(token))
+            var response =
+                await this.authenticationService.AuthenticateAsync(
+                    new SignInRequest(viewModel.UserName, viewModel.Password));
+            if (!string.IsNullOrWhiteSpace(response.Token))
             {
                 return this.RedirectToAction(nameof(DashboardController.Index), DashboardController.Name);
             }

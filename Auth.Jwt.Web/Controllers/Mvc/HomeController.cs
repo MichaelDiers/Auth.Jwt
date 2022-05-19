@@ -1,4 +1,4 @@
-﻿namespace Auth.Jwt.Web.Controllers
+﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
     using System.Diagnostics;
     using Auth.Jwt.Web.Models;

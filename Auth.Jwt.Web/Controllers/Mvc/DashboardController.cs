@@ -1,4 +1,4 @@
-﻿namespace Auth.Jwt.Web.Controllers
+﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
     using Microsoft.AspNetCore.Mvc;
 
