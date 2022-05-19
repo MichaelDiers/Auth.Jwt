@@ -66,6 +66,8 @@ namespace Auth.Jwt.Web
             services.AddControllersWithViews();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddSingleton<IDatabaseService, DatabaseService>();
+            services.AddSingleton<IHashService, HashService>();
         }
     }
 }
