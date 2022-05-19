@@ -1,11 +1,16 @@
 namespace Auth.Jwt.Web
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Services;
+    using Auth.Jwt.Web.Contracts.Settings;
     using Auth.Jwt.Web.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.Extensions.Configuration;
@@ -40,8 +45,23 @@ namespace Auth.Jwt.Web
             app.UseStaticFiles();
             app.UseRequestLocalization(
                 app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseStatusCodePages(
+                context =>
+                {
+                    var response = context.HttpContext.Response;
+                    if (!context.HttpContext.Request.Path.Value.StartsWith(
+                            "/api",
+                            StringComparison.InvariantCultureIgnoreCase) &&
+                        response.StatusCode == StatusCodes.Status401Unauthorized)
+                    {
+                        context.HttpContext.Response.Redirect("/authenticate");
+                    }
+
+                    return Task.CompletedTask;
+                });
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(
@@ -51,6 +71,8 @@ namespace Auth.Jwt.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions<JwtSettings>().Bind(this.Configuration.GetSection("Jwt")).ValidateDataAnnotations();
+
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {
@@ -70,6 +92,19 @@ namespace Auth.Jwt.Web
             services.AddSingleton<IHashService, HashService>();
             services.AddSingleton<ISecretService, SecretService>();
             services.AddScoped<IJwtService, JwtService>();
+
+            services.AddAuthentication(
+                    options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
+                .AddJwtBearer(
+                    options =>
+                    {
+                        var jwtService = services.BuildServiceProvider().GetService<IJwtService>();
+                        jwtService.SetOptions(options);
+                    });
         }
     }
 }

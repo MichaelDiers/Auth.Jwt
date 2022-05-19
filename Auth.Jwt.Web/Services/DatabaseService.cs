@@ -1,6 +1,7 @@
 ﻿namespace Auth.Jwt.Web.Services
 {
     using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Models.Database;
     using Auth.Jwt.Web.Contracts.Services;
@@ -26,7 +27,10 @@
             {
                 {
                     "USERNAME",
-                    new UserEntity("USERNAME", hashService.Hash("password"), new[] {new ClaimEntity("foo", "bar")})
+                    new UserEntity(
+                        "USERNAME",
+                        hashService.Hash("password"),
+                        new[] {new ClaimEntity(ClaimTypes.Role, "MyRoles")})
                 }
             };
         }

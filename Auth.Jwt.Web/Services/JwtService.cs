@@ -8,8 +8,14 @@
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Models.Database;
     using Auth.Jwt.Web.Contracts.Services;
+    using Auth.Jwt.Web.Contracts.Settings;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
+    /// <summary>
+    ///     Service for creating json web tokens.
+    /// </summary>
     public class JwtService : IJwtService
     {
         /// <summary>
@@ -17,13 +23,17 @@
         /// </summary>
         private readonly ISecretService secretService;
 
+        private readonly IOptions<JwtSettings> settings;
+
         /// <summary>
         ///     Initializes a new instance of the JwtService class.
         /// </summary>
         /// <param name="secretService">Service for accessing the google cloud secret manager.</param>
-        public JwtService(ISecretService secretService)
+        /// <param name="settings">The settings for handling jwt.</param>
+        public JwtService(ISecretService secretService, IOptions<JwtSettings> settings)
         {
             this.secretService = secretService;
+            this.settings = settings;
         }
 
         /// <summary>
@@ -46,12 +56,47 @@
             var claims = user.Claims.Select(claim => new Claim(claim.ClaimType, claim.ClaimValue)).ToArray();
 
             var jwtSecurityToken = new JwtSecurityToken(
-                "Issuer",
-                "Audience",
+                this.settings.Value.Issuer,
+                this.settings.Value.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(this.settings.Value.Expires),
                 signingCredentials: signingCredentials);
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        }
+
+        /// <summary>
+        ///     Set the options of the given <see cref="JwtBearerOptions" />.
+        /// </summary>
+        /// <param name="options">The options that are set.</param>
+        public void SetOptions(JwtBearerOptions options)
+        {
+            var keys = this.secretService.GetAsync().Result;
+            var rsa = RSA.Create();
+            rsa.ImportRSAPublicKey(Convert.FromBase64String(keys.PublicKey), out _);
+
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = this.settings.Value.Issuer,
+                ValidAudience = this.settings.Value.Audience,
+                IssuerSigningKey = new RsaSecurityKey(rsa),
+                CryptoProviderFactory = new CryptoProviderFactory {CacheSignatureProviders = false}
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    context.Token = context.Request.Cookies[this.settings.Value.CookieName];
+                    return Task.CompletedTask;
+                }
+            };
         }
     }
 }
