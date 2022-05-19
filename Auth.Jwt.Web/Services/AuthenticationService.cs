@@ -23,14 +23,21 @@
         private readonly IHashService hashService;
 
         /// <summary>
+        ///     Service for generating json web tokens.
+        /// </summary>
+        private readonly IJwtService jwtService;
+
+        /// <summary>
         ///     Initializes a new instance of the AuthenticationService class.
         /// </summary>
         /// <param name="databaseService">A service for accessing the user database.</param>
         /// <param name="hashService">Service for hashing and verifying passwords.</param>
-        public AuthenticationService(IDatabaseService databaseService, IHashService hashService)
+        /// <param name="jwtService">Service for generating json web tokens.</param>
+        public AuthenticationService(IDatabaseService databaseService, IHashService hashService, IJwtService jwtService)
         {
             this.databaseService = databaseService;
             this.hashService = hashService;
+            this.jwtService = jwtService;
         }
 
         /// <summary>
@@ -46,7 +53,8 @@
                 return new TokenResponse();
             }
 
-            return new TokenResponse("token");
+            var token = await this.jwtService.Create(user);
+            return new TokenResponse(token);
         }
     }
 }

@@ -68,6 +68,8 @@ namespace Auth.Jwt.Web
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IDatabaseService, DatabaseService>();
             services.AddSingleton<IHashService, HashService>();
+            services.AddSingleton<ISecretService, SecretService>();
+            services.AddScoped<IJwtService, JwtService>();
         }
     }
 }
