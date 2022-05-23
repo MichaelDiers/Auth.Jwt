@@ -13,8 +13,13 @@
     /// <summary>
     ///     Authenticate a user by name and password.
     /// </summary>
-    public class SignInController : Controller
+    public class SignInController : BaseController
     {
+        /// <summary>
+        ///     The automated user interface tests id of the view.
+        /// </summary>
+        public const string SignInViewAuit = "auit760D2E86_9B97_4E57_B26F_7C2BCBD8130E";
+
         /// <summary>
         ///     Service for authentication.
         /// </summary>
@@ -54,6 +59,7 @@
         [HttpGet]
         public IActionResult SignIn()
         {
+            this.SetAuit(SignInController.SignInViewAuit);
             return this.View();
         }
 
@@ -65,6 +71,7 @@
         [HttpPost]
         public async Task<IActionResult> SignInAsync(SignInViewModel viewModel)
         {
+            this.SetAuit(SignInController.SignInViewAuit);
             if (!this.ModelState.IsValid)
             {
                 return this.View(viewModel);

@@ -10,8 +10,13 @@
     ///     Display and edit the data of an authorized user.
     /// </summary>
     [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
+        /// <summary>
+        ///     The automated user interface tests id of the view.
+        /// </summary>
+        public const string IndexViewAuit = "auitD7896D4F-6606-43F6-BACE-D68FEE50B26F";
+
         /// <summary>
         ///     Display the user data.
         /// </summary>
@@ -19,6 +24,7 @@
         [HttpGet]
         public IActionResult Index()
         {
+            this.SetAuit(UserController.IndexViewAuit);
             var user = this.HttpContext.User;
             var userViewModel = new UserViewModel(user.Claims.Get(ClaimTypes.Name));
             return this.View(userViewModel);

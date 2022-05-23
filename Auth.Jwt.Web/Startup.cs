@@ -41,7 +41,7 @@ namespace Auth.Jwt.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRequestLocalization(
                 app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
