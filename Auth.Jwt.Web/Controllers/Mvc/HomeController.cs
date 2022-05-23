@@ -1,6 +1,7 @@
 ﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
     using System.Diagnostics;
+    using Auth.Jwt.Web.Extensions;
     using Auth.Jwt.Web.Models;
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@
 
         public IActionResult Index()
         {
-            return this.RedirectToAction(nameof(AuthenticateController.Index), AuthenticateController.Name);
+            return this.RedirectToAction(nameof(SignInController.SignIn), nameof(SignInController).ControllerName());
         }
 
         public IActionResult Privacy()

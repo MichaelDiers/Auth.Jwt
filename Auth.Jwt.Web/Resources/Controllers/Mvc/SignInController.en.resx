@@ -117,22 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="PasswordPrompt" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="Required" xml:space="preserve">
-    <value>{0} is required.</value>
-  </data>
-  <data name="StringLength" xml:space="preserve">
-    <value>The length of {0} is required to be between {1} and  {2}.</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Username</value>
-  </data>
-  <data name="UserNamePrompt" xml:space="preserve">
-    <value>Username</value>
+  <data name="UnknownUserPasswordCombination" xml:space="preserve">
+    <value>Unknown combination of username and password.</value>
   </data>
 </root>

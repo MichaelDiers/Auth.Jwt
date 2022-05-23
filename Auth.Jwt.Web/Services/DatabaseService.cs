@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
+    using Auth.Jwt.Web.Contracts.Models;
     using Auth.Jwt.Web.Contracts.Models.Database;
     using Auth.Jwt.Web.Contracts.Services;
     using Auth.Jwt.Web.Models.Database;
@@ -30,7 +31,23 @@
                     new UserEntity(
                         "USERNAME",
                         hashService.Hash("password"),
-                        new[] {new ClaimEntity(ClaimTypes.Role, "MyRoles")})
+                        new[]
+                        {
+                            new ClaimEntity(ClaimTypes.Role, Roles.AuthUser),
+                            new ClaimEntity(ClaimTypes.Name, "UserName")
+                        })
+                },
+                {
+                    "ADMIN",
+                    new UserEntity(
+                        "ADMIN",
+                        hashService.Hash("password"),
+                        new[]
+                        {
+                            new ClaimEntity(ClaimTypes.Role, Roles.AuthUser),
+                            new ClaimEntity(ClaimTypes.Role, Roles.AuthAdmin),
+                            new ClaimEntity(ClaimTypes.Name, "Admin")
+                        })
                 }
             };
         }
