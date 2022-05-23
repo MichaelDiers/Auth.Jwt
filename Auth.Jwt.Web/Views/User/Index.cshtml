@@ -1,7 +1,11 @@
 ﻿@model Auth.Jwt.Web.ViewModels.User.UserViewModel
-
-<h1>User Information</h1>
+@inject IViewLocalizer localizer
+@{
+    ViewData["Title"] = localizer.GetString("Title", Model.UserName);
+    ViewData["Headline"] = localizer.GetString("Headline", Model.UserName);
+}
+<h1>@ViewData["Headline"]</h1>
 <div>
-    <div>Username</div>
+    <label asp-for='UserName'></label>
     <div>@Model.UserName</div>
 </div>

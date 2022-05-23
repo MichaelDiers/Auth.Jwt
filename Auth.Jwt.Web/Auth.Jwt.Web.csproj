@@ -18,8 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\ViewModels\" />
-    <Folder Include="Resources\Views\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
 
