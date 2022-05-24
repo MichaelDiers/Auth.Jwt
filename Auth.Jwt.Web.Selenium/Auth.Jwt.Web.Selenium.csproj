@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Auth.Jwt.Web\Auth.Jwt.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\SignUp\" />
+  </ItemGroup>
+
 </Project>

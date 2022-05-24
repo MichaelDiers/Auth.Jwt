@@ -62,5 +62,16 @@
             await Task.CompletedTask;
             return this.users.TryGetValue(userName, out var user) ? user : null;
         }
+
+        /// <summary>
+        ///     Insert a new <see cref="UserEntity" /> into the users collection.
+        /// </summary>
+        /// <param name="entity">The entity that is added.</param>
+        /// <returns>A <see cref="Task" /> that indicates termination.</returns>
+        public async Task SetAsync(IUserEntity entity)
+        {
+            await Task.CompletedTask;
+            this.users.Add(entity.UserName, entity);
+        }
     }
 }

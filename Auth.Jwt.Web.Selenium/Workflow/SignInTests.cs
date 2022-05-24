@@ -1,7 +1,7 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Workflow
 {
-    using System;
     using Auth.Jwt.Web.Selenium.Pages.SignIn;
+    using Auth.Jwt.Web.Selenium.Pages.User;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Edge;
@@ -16,39 +16,27 @@
         [InlineData(nameof(EdgeDriver))]
         public void SignIn(string browser)
         {
-            var driver = SignInTests.CreateWebDriver(browser);
-            try
-            {
-                driver.Navigate().GoToUrl("http://localhost:5000");
-
-                SignInPage.Create(driver).SignIn("userName", "password");
-                UserPage.Create(driver);
-            }
-            finally
-            {
-                driver.Quit();
-            }
+            SeleniumRunner.Run(SignInTests.SignInTest, browser, "http://localhost:5000");
         }
 
-        private static IWebDriver CreateWebDriver(string browser)
+        [Theory]
+        [InlineData(nameof(ChromeDriver))]
+        [InlineData(nameof(FirefoxDriver))]
+        [InlineData(nameof(EdgeDriver))]
+        public void SwitchToSignUp(string browser)
         {
-            switch (browser)
-            {
-                case nameof(ChromeDriver):
-                    var chromeOptions = new ChromeOptions();
-                    chromeOptions.AddArgument("--headless");
-                    return new ChromeDriver(chromeOptions);
-                case nameof(FirefoxDriver):
-                    var firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.AddArgument("--headless");
-                    return new FirefoxDriver(firefoxOptions);
-                case nameof(EdgeDriver):
-                    var edgeOptions = new EdgeOptions();
-                    edgeOptions.AddArgument("--headless");
-                    return new EdgeDriver(edgeOptions);
-                default:
-                    throw new ArgumentException();
-            }
+            SeleniumRunner.Run(SignInTests.SwitchToSignUpTest, browser, "http://localhost:5000");
+        }
+
+        private static void SignInTest(IWebDriver driver)
+        {
+            SignInPage.Create(driver).SignIn("userName", "password");
+            UserPage.Create(driver);
+        }
+
+        private static void SwitchToSignUpTest(IWebDriver driver)
+        {
+            SignInPage.Create(driver).ToSignUpIndexPage();
         }
     }
 }

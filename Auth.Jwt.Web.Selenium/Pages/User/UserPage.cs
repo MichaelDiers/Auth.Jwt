@@ -1,4 +1,4 @@
-﻿namespace Auth.Jwt.Web.Selenium.Pages.SignIn
+﻿namespace Auth.Jwt.Web.Selenium.Pages.User
 {
     using Auth.Jwt.Web.Controllers.Mvc;
     using OpenQA.Selenium;

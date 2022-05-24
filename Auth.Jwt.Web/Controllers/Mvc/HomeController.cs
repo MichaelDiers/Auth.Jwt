@@ -15,7 +15,9 @@
 
         public IActionResult Index()
         {
-            return this.RedirectToAction(nameof(SignInController.SignIn), nameof(SignInController).ControllerName());
+            return this.RedirectToAction(
+                nameof(AuthenticateController.SignIn),
+                nameof(AuthenticateController).ControllerName());
         }
 
         public IActionResult Privacy()

@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="driver">The current web driver.</param>
         protected SignInPage(IWebDriver driver)
-            : base(driver, SignInController.SignInViewAuit)
+            : base(driver, AuthenticateController.SignInViewAuit)
         {
         }
 
@@ -58,6 +58,16 @@
         {
             this.Submit(By.CssSelector("input[type=submit]"));
             return this;
+        }
+
+        /// <summary>
+        ///     Use a link to the <see cref="SignUpIndexPage" />.
+        /// </summary>
+        /// <returns>A new <see cref="SignUpIndexPage" />.</returns>
+        public SignUpIndexPage ToSignUpIndexPage()
+        {
+            this.Click(By.CssSelector("main form ~ a"));
+            return this.Create(SignUpIndexPage.Create);
         }
 
         /// <summary>

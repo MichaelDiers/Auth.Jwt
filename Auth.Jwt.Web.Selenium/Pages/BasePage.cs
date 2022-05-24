@@ -43,6 +43,26 @@
         }
 
         /// <summary>
+        ///     Click a web element.
+        /// </summary>
+        /// <param name="by">The web element is identified by this selector.</param>
+        protected void Click(By by)
+        {
+            this.driver.FindElement(by).Click();
+        }
+
+        /// <summary>
+        ///     Create a new page.
+        /// </summary>
+        /// <typeparam name="T">The type of the page.</typeparam>
+        /// <param name="create">A factory method for creating the page.</param>
+        /// <returns></returns>
+        protected T Create<T>(Func<IWebDriver, T> create)
+        {
+            return create(this.driver);
+        }
+
+        /// <summary>
         ///     Send keys to the specified element.
         /// </summary>
         /// <param name="by">The web element is identified by this selector.</param>

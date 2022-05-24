@@ -14,5 +14,12 @@
         /// <param name="userName">The name of the user.</param>
         /// <returns>A <see cref="Task{T}" /> whose result is an <see cref="IUserEntity" /> or null if the user does not exists.</returns>
         Task<IUserEntity?> GetAsync(string userName);
+
+        /// <summary>
+        ///     Insert a new <see cref="IUserEntity" /> into the users collection.
+        /// </summary>
+        /// <param name="entity">The entity that is added.</param>
+        /// <returns>A <see cref="Task" /> that indicates termination.</returns>
+        Task SetAsync(IUserEntity entity);
     }
 }

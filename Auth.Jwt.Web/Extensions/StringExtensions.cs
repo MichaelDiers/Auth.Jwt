@@ -12,7 +12,7 @@
         /// <returns>The name of the controller without its suffix.</returns>
         public static string ControllerName(this string controller)
         {
-            return controller.Substring(0, controller.Length - 10);
+            return controller[..^10];
         }
 
         /// <summary>
