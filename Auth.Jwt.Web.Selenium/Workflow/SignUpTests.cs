@@ -32,7 +32,7 @@
         {
             var userName = Guid.NewGuid().ToString();
             var password = Guid.NewGuid().ToString();
-            SignInPage.Create(driver).ToSignUpIndexPage().SignUp(userName, password);
+            SignInPage.Create(driver).ToSignUpIndexPage().SignUp(userName, password, password);
         }
 
         private static void SwitchToSignInTest(IWebDriver driver)
