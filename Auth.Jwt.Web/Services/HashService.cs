@@ -26,7 +26,9 @@
         /// <returns>True if password and hash do match and false otherwise.</returns>
         public bool Verify(string password, string hash)
         {
-            return BCrypt.Verify(password, hash);
+            return BCrypt.Verify(
+                password,
+                hash);
         }
     }
 }

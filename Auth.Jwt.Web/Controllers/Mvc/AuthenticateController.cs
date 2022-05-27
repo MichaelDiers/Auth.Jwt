@@ -18,12 +18,12 @@
         /// <summary>
         ///     The automated user interface tests id of the sign in view.
         /// </summary>
-        public const string SignInViewAuit = nameof(SignInViewAuit);
+        public const string SignInViewAuit = nameof(AuthenticateController.SignInViewAuit);
 
         /// <summary>
         ///     The automated user interface tests id of the sign up view.
         /// </summary>
-        public const string SignUpViewAuit = nameof(SignUpViewAuit);
+        public const string SignUpViewAuit = nameof(AuthenticateController.SignUpViewAuit);
 
         /// <summary>
         ///     Service for authenticating users.
@@ -58,7 +58,7 @@
         public IActionResult Logout()
         {
             this.AddCookie(string.Empty);
-            return this.RedirectToAction(nameof(SignIn));
+            return this.RedirectToAction(nameof(AuthenticateController.SignIn));
         }
 
         /// <summary>

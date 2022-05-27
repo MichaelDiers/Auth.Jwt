@@ -29,17 +29,23 @@
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(userName));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(userName));
             }
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(password));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(password));
             }
 
             if (string.IsNullOrWhiteSpace(passwordRepeat))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(passwordRepeat));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(passwordRepeat));
             }
 
             this.UserName = userName;
@@ -53,13 +59,17 @@
         [Display(
             Name = nameof(SignUpViewModel.Password),
             Prompt = nameof(SignUpViewModel.Password) + nameof(DisplayAttribute.Prompt))]
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(RequiredAttribute))]
+        [Required(
+            AllowEmptyStrings = false,
+            ErrorMessage = nameof(RequiredAttribute))]
         [DataType(DataType.Password)]
         [StringLength(
             Validations.PasswordMaxLength,
             ErrorMessage = nameof(StringLengthAttribute),
             MinimumLength = Validations.PasswordMinLength)]
-        [Compare(nameof(SignUpViewModel.PasswordRepeat), ErrorMessage = nameof(CompareAttribute))]
+        [Compare(
+            nameof(SignUpViewModel.PasswordRepeat),
+            ErrorMessage = nameof(CompareAttribute))]
         public string Password { get; set; }
 
         /// <summary>
@@ -68,13 +78,17 @@
         [Display(
             Name = nameof(SignUpViewModel.PasswordRepeat),
             Prompt = nameof(SignUpViewModel.PasswordRepeat) + nameof(DisplayAttribute.Prompt))]
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(RequiredAttribute))]
+        [Required(
+            AllowEmptyStrings = false,
+            ErrorMessage = nameof(RequiredAttribute))]
         [DataType(DataType.Password)]
         [StringLength(
             Validations.PasswordMaxLength,
             ErrorMessage = nameof(StringLengthAttribute),
             MinimumLength = Validations.PasswordMinLength)]
-        [Compare(nameof(SignUpViewModel.Password), ErrorMessage = nameof(CompareAttribute))]
+        [Compare(
+            nameof(SignUpViewModel.Password),
+            ErrorMessage = nameof(CompareAttribute))]
         public string PasswordRepeat { get; set; }
 
         /// <summary>
@@ -83,7 +97,9 @@
         [Display(
             Name = nameof(SignUpViewModel.UserName),
             Prompt = nameof(SignUpViewModel.UserName) + nameof(DisplayAttribute.Prompt))]
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(RequiredAttribute))]
+        [Required(
+            AllowEmptyStrings = false,
+            ErrorMessage = nameof(RequiredAttribute))]
         [DataType(DataType.Text)]
         [StringLength(
             Validations.UserNameMaxLength,

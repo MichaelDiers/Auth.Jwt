@@ -51,7 +51,10 @@
         public async Task<ITokenResponse> AuthenticateAsync(ISignInRequest request)
         {
             var user = await this.databaseService.GetAsync(request.UserName.NormalizeUserName());
-            if (user == null || !this.hashService.Verify(request.Password, user.Password))
+            if (user == null ||
+                !this.hashService.Verify(
+                    request.Password,
+                    user.Password))
             {
                 return new TokenResponse();
             }
@@ -81,8 +84,12 @@
                 request.Password,
                 new[]
                 {
-                    new ClaimEntity(ClaimTypes.Role, Roles.AuthUser),
-                    new ClaimEntity(ClaimTypes.Name, request.UserName)
+                    new ClaimEntity(
+                        ClaimTypes.Role,
+                        Roles.AuthUser),
+                    new ClaimEntity(
+                        ClaimTypes.Name,
+                        request.UserName)
                 });
             await this.databaseService.SetAsync(user);
             var token = await this.jwtService.Create(user);

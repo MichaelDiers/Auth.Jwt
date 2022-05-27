@@ -1,7 +1,7 @@
-﻿@using Auth.Jwt.Web.Controllers.Mvc
-@using Microsoft.AspNetCore.Http
+﻿@using System.Threading
+@using Auth.Jwt.Web.Controllers.Mvc
 <!DOCTYPE html>
-<html lang='@System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName'>
+<html lang='@Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName'>
     <head>
         <meta charset='utf-8' />
         <meta content='width=device-width, initial-scale=1.0'
@@ -14,8 +14,11 @@
         <header>
             @if (User.Identity.IsAuthenticated)
             {
-                <a id='logout' asp-action='Logout'
-                   asp-controller='Authenticate'>Logout</a>
+                <a asp-action='Logout'
+                   asp-controller='Authenticate'
+                   id='logout'>
+                    Logout
+                </a>
             }
         </header>
 
@@ -34,8 +37,8 @@
             </div>
         </footer>
         <script asp-append-version='true'
-                src='~/js/site.js'
-                defer></script>
+                defer
+                src='~/js/site.js'></script>
         @await RenderSectionAsync("Scripts", false)
     </body>
 </html>

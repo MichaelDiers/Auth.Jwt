@@ -24,7 +24,9 @@
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(userName));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(userName));
             }
 
             this.UserName = userName;
@@ -36,7 +38,9 @@
         [Display(
             Name = nameof(UserViewModel.UserName),
             Prompt = nameof(UserViewModel.UserName) + nameof(DisplayAttribute.Prompt))]
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(RequiredAttribute))]
+        [Required(
+            AllowEmptyStrings = false,
+            ErrorMessage = nameof(RequiredAttribute))]
         [DataType(DataType.Text)]
         [StringLength(
             Validations.UserNameMaxLength,

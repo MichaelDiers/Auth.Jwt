@@ -15,12 +15,16 @@
         {
             if (string.IsNullOrWhiteSpace(privateKey))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(privateKey));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(privateKey));
             }
 
             if (string.IsNullOrWhiteSpace(publicKey))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(publicKey));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(publicKey));
             }
 
             this.PrivateKey = privateKey;

@@ -10,7 +10,9 @@
         public void Ctor()
         {
             var user = new UserViewModel();
-            Assert.Equal(string.Empty, user.UserName);
+            Assert.Equal(
+                string.Empty,
+                user.UserName);
         }
 
         [Theory]
@@ -26,7 +28,9 @@
         public void CtorSucceeds(string userName)
         {
             var user = new UserViewModel(userName);
-            Assert.Equal(userName, user.UserName);
+            Assert.Equal(
+                userName,
+                user.UserName);
         }
     }
 }

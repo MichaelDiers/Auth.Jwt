@@ -46,14 +46,22 @@
             var keys = await this.secretService.GetAsync();
 
             var rsa = RSA.Create();
-            rsa.ImportRSAPrivateKey(Convert.FromBase64String(keys.PrivateKey), out _);
+            rsa.ImportRSAPrivateKey(
+                Convert.FromBase64String(keys.PrivateKey),
+                out _);
 
-            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
+            var signingCredentials = new SigningCredentials(
+                new RsaSecurityKey(rsa),
+                SecurityAlgorithms.RsaSha256)
             {
                 CryptoProviderFactory = new CryptoProviderFactory {CacheSignatureProviders = false}
             };
 
-            var claims = user.Claims.Select(claim => new Claim(claim.ClaimType, claim.ClaimValue)).ToArray();
+            var claims = user.Claims.Select(
+                    claim => new Claim(
+                        claim.ClaimType,
+                        claim.ClaimValue))
+                .ToArray();
 
             var jwtSecurityToken = new JwtSecurityToken(
                 this.settings.Value.Issuer,
@@ -72,7 +80,9 @@
         {
             var keys = this.secretService.GetAsync().Result;
             var rsa = RSA.Create();
-            rsa.ImportRSAPublicKey(Convert.FromBase64String(keys.PublicKey), out _);
+            rsa.ImportRSAPublicKey(
+                Convert.FromBase64String(keys.PublicKey),
+                out _);
 
             options.RequireHttpsMetadata = false;
             options.SaveToken = false;

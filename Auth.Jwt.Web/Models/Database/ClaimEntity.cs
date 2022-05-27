@@ -27,12 +27,16 @@
         {
             if (string.IsNullOrWhiteSpace(claimType))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(claimType));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(claimType));
             }
 
             if (string.IsNullOrWhiteSpace(claimValue))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(claimValue));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(claimValue));
             }
 
             this.ClaimType = claimType;

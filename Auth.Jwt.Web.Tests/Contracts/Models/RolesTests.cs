@@ -17,7 +17,12 @@
         [InlineData(Roles.AuthAll)]
         public void HasAnyAuthRole(string role)
         {
-            var claims = role.Split(",").Select(claimValue => new Claim(ClaimTypes.Role, claimValue)).ToArray();
+            var claims = role.Split(",")
+                .Select(
+                    claimValue => new Claim(
+                        ClaimTypes.Role,
+                        claimValue))
+                .ToArray();
             var user = new ClaimsPrincipal(new[] {new ClaimsIdentity(claims)});
             Assert.True(user.HasAnyAuthRole());
         }

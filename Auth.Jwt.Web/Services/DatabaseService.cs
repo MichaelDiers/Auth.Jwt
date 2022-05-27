@@ -27,26 +27,34 @@
             this.users = new Dictionary<string, IUserEntity>
             {
                 {
-                    "USERNAME",
-                    new UserEntity(
+                    "USERNAME", new UserEntity(
                         "USERNAME",
                         hashService.Hash("password"),
                         new[]
                         {
-                            new ClaimEntity(ClaimTypes.Role, Roles.AuthUser),
-                            new ClaimEntity(ClaimTypes.Name, "UserName")
+                            new ClaimEntity(
+                                ClaimTypes.Role,
+                                Roles.AuthUser),
+                            new ClaimEntity(
+                                ClaimTypes.Name,
+                                "UserName")
                         })
                 },
                 {
-                    "ADMIN",
-                    new UserEntity(
+                    "ADMIN", new UserEntity(
                         "ADMIN",
                         hashService.Hash("password"),
                         new[]
                         {
-                            new ClaimEntity(ClaimTypes.Role, Roles.AuthUser),
-                            new ClaimEntity(ClaimTypes.Role, Roles.AuthAdmin),
-                            new ClaimEntity(ClaimTypes.Name, "Admin")
+                            new ClaimEntity(
+                                ClaimTypes.Role,
+                                Roles.AuthUser),
+                            new ClaimEntity(
+                                ClaimTypes.Role,
+                                Roles.AuthAdmin),
+                            new ClaimEntity(
+                                ClaimTypes.Name,
+                                "Admin")
                         })
                 }
             };
@@ -60,7 +68,11 @@
         public async Task<IUserEntity?> GetAsync(string userName)
         {
             await Task.CompletedTask;
-            return this.users.TryGetValue(userName, out var user) ? user : null;
+            return this.users.TryGetValue(
+                userName,
+                out var user)
+                ? user
+                : null;
         }
 
         /// <summary>
@@ -71,7 +83,9 @@
         public async Task SetAsync(IUserEntity entity)
         {
             await Task.CompletedTask;
-            this.users.Add(entity.UserName, entity);
+            this.users.Add(
+                entity.UserName,
+                entity);
         }
     }
 }

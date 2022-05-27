@@ -31,12 +31,16 @@
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(userName));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(userName));
             }
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(password));
+                throw new ArgumentException(
+                    "Value cannot be null or whitespace.",
+                    nameof(password));
             }
 
             this.UserName = userName;
