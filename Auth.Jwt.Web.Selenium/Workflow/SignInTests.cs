@@ -1,42 +1,73 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Workflow
 {
-    using Auth.Jwt.Web.Selenium.Pages.SignIn;
-    using Auth.Jwt.Web.Selenium.Pages.User;
+    using System;
+    using Auth.Jwt.Web.Selenium.Pages;
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Edge;
-    using OpenQA.Selenium.Firefox;
     using Xunit;
 
-    public class SignInTests
+    public class SignInTests : TestBase
     {
         [Theory]
-        [InlineData(nameof(ChromeDriver))]
-        [InlineData(nameof(FirefoxDriver))]
-        [InlineData(nameof(EdgeDriver))]
-        public void SignIn(string browser)
+        [ClassData(typeof(TestDataGenerator))]
+        public void LogoutNotVisibleOnSignIn(TestData testData)
         {
-            SeleniumRunner.Run(SignInTests.SignInTest, browser, "http://localhost:5000");
+            var driver = this.Init(testData);
+
+            SignInPage.Create(driver);
+            var thrown = false;
+            try
+            {
+                driver.FindElement(By.Id("logout"));
+            }
+            catch (NoSuchElementException)
+            {
+                thrown = true;
+            }
+
+            Assert.True(thrown);
         }
 
         [Theory]
-        [InlineData(nameof(ChromeDriver))]
-        [InlineData(nameof(FirefoxDriver))]
-        [InlineData(nameof(EdgeDriver))]
-        public void SwitchToSignUp(string browser)
+        [ClassData(typeof(TestDataGenerator))]
+        public void SignInFail(TestData testData)
         {
-            SeleniumRunner.Run(SignInTests.SwitchToSignUpTest, browser, "http://localhost:5000");
+            var driver = this.Init(testData);
+
+            SignInPage.Create(driver)
+                .SignIn(
+                    Guid.NewGuid().ToString(),
+                    Guid.NewGuid().ToString())
+                .VerifyOnPage();
         }
 
-        private static void SignInTest(IWebDriver driver)
+        [Theory]
+        [ClassData(typeof(TestDataGenerator))]
+        public void SignInSuccess(TestData testData)
         {
-            SignInPage.Create(driver).SignIn("userName", "password");
-            UserPage.Create(driver);
+            var driver = this.Init(testData);
+
+            SignInPage.Create(driver)
+            .SignIn(
+                testData.UserName,
+                testData.Password);
+            UserIndexPage.Create(driver);
         }
 
-        private static void SwitchToSignUpTest(IWebDriver driver)
+        [Theory]
+        [ClassData(typeof(TestDataGenerator))]
+        public void SwitchToSignUp(TestData testData)
         {
+            var driver = this.Init(testData);
+
             SignInPage.Create(driver).ToSignUpIndexPage();
+        }
+
+        [Theory]
+        [ClassData(typeof(TestDataGenerator))]
+        public void VerifyStartPage(TestData testData)
+        {
+            var driver = this.Init(testData);
+            SignInPage.Create(driver);
         }
     }
 }

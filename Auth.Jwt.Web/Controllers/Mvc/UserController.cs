@@ -15,7 +15,7 @@
         /// <summary>
         ///     The automated user interface tests id of the view.
         /// </summary>
-        public const string IndexViewAuit = "auitD7896D4F-6606-43F6-BACE-D68FEE50B26F";
+        public const string UserIndexViewAuit = nameof(UserController.UserIndexViewAuit);
 
         /// <summary>
         ///     Display the user data.
@@ -24,7 +24,7 @@
         [HttpGet]
         public IActionResult Index()
         {
-            this.SetAuit(UserController.IndexViewAuit);
+            this.SetAuit(UserController.UserIndexViewAuit);
             var user = this.HttpContext.User;
             var userViewModel = new UserViewModel(user.Claims.Get(ClaimTypes.Name));
             return this.View(userViewModel);

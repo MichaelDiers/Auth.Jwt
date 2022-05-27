@@ -37,9 +37,13 @@
         /// </summary>
         protected void CheckOnPage()
         {
-            var auitElement = new WebDriverWait(this.driver, TimeSpan.FromSeconds(10)).Until(
+            var auitElement = new WebDriverWait(
+                this.driver,
+                TimeSpan.FromSeconds(10)).Until(
                 webDriver => webDriver.FindElement(By.CssSelector($"[auit={this.auit}]")));
-            Assert.Equal(this.auit, auitElement.GetAttribute(BaseController.Auit));
+            Assert.Equal(
+                this.auit,
+                auitElement.GetAttribute(BaseController.Auit));
         }
 
         /// <summary>
@@ -60,6 +64,15 @@
         protected T Create<T>(Func<IWebDriver, T> create)
         {
             return create(this.driver);
+        }
+
+        /// <summary>
+        ///     Check if an element is displayed.
+        /// </summary>
+        /// <param name="by">The web element selector.</param>
+        protected void IsDisplayed(By by)
+        {
+            Assert.True(this.driver.FindElement(by).Displayed);
         }
 
         /// <summary>

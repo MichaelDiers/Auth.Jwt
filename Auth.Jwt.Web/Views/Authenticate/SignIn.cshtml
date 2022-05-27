@@ -7,7 +7,8 @@
 <form method='post'>
     @Html.ValidationSummary(true)
     <label asp-for='UserName'></label>
-    <input asp-for='UserName' />
+    <input asp-for='UserName'
+           autofocus />
     <span asp-validation-for='UserName'></span>
     <label asp-for='Password'></label>
     <input asp-for='Password' />

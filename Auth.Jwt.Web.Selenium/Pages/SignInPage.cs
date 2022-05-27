@@ -1,4 +1,4 @@
-﻿namespace Auth.Jwt.Web.Selenium.Pages.SignIn
+﻿namespace Auth.Jwt.Web.Selenium.Pages
 {
     using Auth.Jwt.Web.Controllers.Mvc;
     using OpenQA.Selenium;
@@ -13,7 +13,9 @@
         /// </summary>
         /// <param name="driver">The current web driver.</param>
         protected SignInPage(IWebDriver driver)
-            : base(driver, AuthenticateController.SignInViewAuit)
+            : base(
+                driver,
+                AuthenticateController.SignInViewAuit)
         {
         }
 
@@ -35,7 +37,9 @@
         /// <returns>A self reference.</returns>
         public SignInPage Password(string password)
         {
-            this.SendKeys(By.Id("Password"), password);
+            this.SendKeys(
+                By.Id("Password"),
+                password);
             return this;
         }
 
@@ -77,7 +81,9 @@
         /// <returns>A self reference.</returns>
         public SignInPage UserName(string userName)
         {
-            this.SendKeys(By.Id("UserName"), userName);
+            this.SendKeys(
+                By.Id("UserName"),
+                userName);
             return this;
         }
 

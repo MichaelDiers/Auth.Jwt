@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Auth.Jwt.Web\Auth.Jwt.Web.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\SignUp\" />
   </ItemGroup>
 
 </Project>

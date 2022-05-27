@@ -1,5 +1,6 @@
 ﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
+    using System;
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Services;
     using Auth.Jwt.Web.Contracts.Settings;
@@ -7,6 +8,7 @@
     using Auth.Jwt.Web.Models.Requests;
     using Auth.Jwt.Web.ViewModels.SignIn;
     using Auth.Jwt.Web.ViewModels.SignUp;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Options;
@@ -16,12 +18,12 @@
         /// <summary>
         ///     The automated user interface tests id of the sign in view.
         /// </summary>
-        public const string SignInViewAuit = "auit760D2E86_9B97_4E57_B26F_7C2BCBD8130E";
+        public const string SignInViewAuit = nameof(SignInViewAuit);
 
         /// <summary>
         ///     The automated user interface tests id of the sign up view.
         /// </summary>
-        public const string SignUpViewAuit = "auit-734A785B-CEA0-4484-8037-4CC76FA87761";
+        public const string SignUpViewAuit = nameof(SignUpViewAuit);
 
         /// <summary>
         ///     Service for authenticating users.
@@ -52,6 +54,13 @@
             this.localizer = localizer;
         }
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            this.AddCookie(string.Empty);
+            return this.RedirectToAction(nameof(SignIn));
+        }
+
         /// <summary>
         ///     Request the sign in a view.
         /// </summary>
@@ -77,17 +86,22 @@
                 return this.View(viewModel);
             }
 
-            var tokenResponse =
-                await this.authenticationService.AuthenticateAsync(
-                    new SignInRequest(viewModel.UserName, viewModel.Password));
+            var tokenResponse = await this.authenticationService.AuthenticateAsync(
+                new SignInRequest(
+                    viewModel.UserName,
+                    viewModel.Password));
             if (string.IsNullOrWhiteSpace(tokenResponse.Token))
             {
-                this.ModelState.AddModelError(string.Empty, this.localizer["UnknownUserPasswordCombination"]);
+                this.ModelState.AddModelError(
+                    string.Empty,
+                    this.localizer["UnknownUserPasswordCombination"]);
                 return this.View(viewModel);
             }
 
-            this.HttpContext.Response.Cookies.Append(this.jwtSettings.Value.CookieName, tokenResponse.Token);
-            return this.RedirectToAction(nameof(UserController.Index), nameof(UserController).ControllerName());
+            this.AddCookie(tokenResponse.Token);
+            return this.RedirectToAction(
+                nameof(UserController.Index),
+                nameof(UserController).ControllerName());
         }
 
         /// <summary>
@@ -106,18 +120,24 @@
         {
             if (!this.ModelState.IsValid)
             {
+                this.SetAuit(AuthenticateController.SignUpViewAuit);
                 return this.View(viewModel);
             }
 
-            var tokenResponse =
-                await this.authenticationService.SignUp(new SignUpRequest(viewModel.UserName, viewModel.Password));
+            var tokenResponse = await this.authenticationService.SignUp(
+                new SignUpRequest(
+                    viewModel.UserName,
+                    viewModel.Password));
             if (string.IsNullOrWhiteSpace(tokenResponse.Token))
             {
-                this.ModelState.AddModelError(string.Empty, this.localizer["SignUpUserExists"]);
+                this.ModelState.AddModelError(
+                    string.Empty,
+                    this.localizer["SignUpUserExists"]);
+                this.SetAuit(AuthenticateController.SignUpViewAuit);
                 return this.View(viewModel);
             }
 
-            this.Response.Cookies.Append(this.jwtSettings.Value.CookieName, tokenResponse.Token);
+            this.AddCookie(tokenResponse.Token);
             return this.RedirectToAction(nameof(this.ValidateEmail));
         }
 
@@ -125,6 +145,26 @@
         public IActionResult ValidateEmail()
         {
             return this.View();
+        }
+
+        private void AddCookie(string value)
+        {
+            var options = new CookieOptions
+            {
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                HttpOnly = true
+            };
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                options.Expires = DateTimeOffset.UtcNow.AddDays(-2);
+            }
+
+            this.Response.Cookies.Append(
+                this.jwtSettings.Value.CookieName,
+                value,
+                options);
         }
     }
 }

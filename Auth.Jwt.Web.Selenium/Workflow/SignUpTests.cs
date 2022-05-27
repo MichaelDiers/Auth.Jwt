@@ -1,42 +1,52 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Workflow
 {
     using System;
-    using Auth.Jwt.Web.Selenium.Pages.SignIn;
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Edge;
-    using OpenQA.Selenium.Firefox;
+    using Auth.Jwt.Web.Selenium.Pages;
     using Xunit;
 
-    public class SignUpTests
+    public class SignUpTests : TestBase
     {
         [Theory]
-        [InlineData(nameof(ChromeDriver))]
-        [InlineData(nameof(FirefoxDriver))]
-        [InlineData(nameof(EdgeDriver))]
-        public void SignUp(string browser)
+        [ClassData(typeof(TestDataGenerator))]
+        public void SignUpFail(TestData testData)
         {
-            SeleniumRunner.Run(SignUpTests.SignUpTest, browser, "http://localhost:5000");
+            var driver = this.Init(testData);
+
+            SignInPage.Create(driver)
+                .ToSignUpIndexPage()
+                .SignUp(
+                    testData.UserName,
+                    testData.Password,
+                    testData.Password)
+                .VerifyOnPage()
+                .ValidationSummaryErrorsIsVisible();
         }
 
         [Theory]
-        [InlineData(nameof(ChromeDriver))]
-        [InlineData(nameof(FirefoxDriver))]
-        [InlineData(nameof(EdgeDriver))]
-        public void SwitchToSignIn(string browser)
+        [ClassData(typeof(TestDataGenerator))]
+        public void SignUpSuccess(TestData testData)
         {
-            SeleniumRunner.Run(SignUpTests.SwitchToSignInTest, browser, "http://localhost:5000");
-        }
+            var driver = this.Init(testData);
 
-        private static void SignUpTest(IWebDriver driver)
-        {
             var userName = Guid.NewGuid().ToString();
             var password = Guid.NewGuid().ToString();
-            SignInPage.Create(driver).ToSignUpIndexPage().SignUp(userName, password, password);
+
+            SignInPage.Create(driver)
+            .ToSignUpIndexPage()
+            .SignUp(
+                userName,
+                password,
+                password);
+
+            // Todo: check page
         }
 
-        private static void SwitchToSignInTest(IWebDriver driver)
+        [Theory]
+        [ClassData(typeof(TestDataGenerator))]
+        public void SwitchToSignIn(TestData testData)
         {
+            var driver = this.Init(testData);
+
             SignInPage.Create(driver).ToSignUpIndexPage().ToSignInPage();
         }
     }

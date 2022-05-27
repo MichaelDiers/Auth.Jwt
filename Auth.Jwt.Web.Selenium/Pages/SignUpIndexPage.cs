@@ -1,7 +1,6 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Pages
 {
     using Auth.Jwt.Web.Controllers.Mvc;
-    using Auth.Jwt.Web.Selenium.Pages.SignIn;
     using Auth.Jwt.Web.ViewModels.SignUp;
     using OpenQA.Selenium;
 
@@ -12,7 +11,9 @@
         /// </summary>
         /// <param name="driver">The current web driver.</param>
         protected SignUpIndexPage(IWebDriver driver)
-            : base(driver, AuthenticateController.SignUpViewAuit)
+            : base(
+                driver,
+                AuthenticateController.SignUpViewAuit)
         {
         }
 
@@ -34,7 +35,9 @@
         /// <returns>A self reference.</returns>
         public SignUpIndexPage Password(string password)
         {
-            this.SendKeys(By.Id(nameof(SignUpViewModel.Password)), password);
+            this.SendKeys(
+                By.Id(nameof(SignUpViewModel.Password)),
+                password);
             return this;
         }
 
@@ -45,7 +48,9 @@
         /// <returns>A self reference.</returns>
         public SignUpIndexPage PasswordRepeat(string password)
         {
-            this.SendKeys(By.Id(nameof(SignUpViewModel.PasswordRepeat)), password);
+            this.SendKeys(
+                By.Id(nameof(SignUpViewModel.PasswordRepeat)),
+                password);
             return this;
         }
 
@@ -88,7 +93,19 @@
         /// <returns>A self reference.</returns>
         public SignUpIndexPage UserName(string userName)
         {
-            this.SendKeys(By.Id(nameof(SignUpViewModel.UserName)), userName);
+            this.SendKeys(
+                By.Id(nameof(SignUpViewModel.UserName)),
+                userName);
+            return this;
+        }
+
+        /// <summary>
+        ///     Check if validation summary is displayed.
+        /// </summary>
+        /// <returns></returns>
+        public SignUpIndexPage ValidationSummaryErrorsIsVisible()
+        {
+            this.IsDisplayed(By.CssSelector(".validation-summary-errors"));
             return this;
         }
 

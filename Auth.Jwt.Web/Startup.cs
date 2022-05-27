@@ -54,7 +54,7 @@ namespace Auth.Jwt.Web
                             StringComparison.InvariantCultureIgnoreCase) &&
                         response.StatusCode == StatusCodes.Status401Unauthorized)
                     {
-                        context.HttpContext.Response.Redirect("/authenticate");
+                        context.HttpContext.Response.Redirect("/");
                     }
 
                     return Task.CompletedTask;
@@ -76,7 +76,11 @@ namespace Auth.Jwt.Web
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {
-                    var cultures = new List<CultureInfo> {new CultureInfo("de"), new CultureInfo("en")};
+                    var cultures = new List<CultureInfo>
+                    {
+                        new CultureInfo("de"),
+                        new CultureInfo("en")
+                    };
                     options.DefaultRequestCulture = new RequestCulture(cultures[0]);
                     options.SupportedCultures = cultures;
                     options.SupportedUICultures = cultures;

@@ -1,4 +1,5 @@
 ﻿@using Auth.Jwt.Web.Controllers.Mvc
+@using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
 <html lang='@System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName'>
     <head>
@@ -11,6 +12,11 @@
     </head>
     <body auit='@ViewData[BaseController.Auit]'>
         <header>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a id='logout' asp-action='Logout'
+                   asp-controller='Authenticate'>Logout</a>
+            }
         </header>
 
         <main>
