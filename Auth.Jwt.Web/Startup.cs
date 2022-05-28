@@ -6,6 +6,7 @@ namespace Auth.Jwt.Web
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Services;
     using Auth.Jwt.Web.Contracts.Settings;
+    using Auth.Jwt.Web.Filters;
     using Auth.Jwt.Web.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
@@ -94,7 +95,7 @@ namespace Auth.Jwt.Web
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => { options.Filters.Add<EmailValidatedFilter>(); });
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IDatabaseService, DatabaseService>();

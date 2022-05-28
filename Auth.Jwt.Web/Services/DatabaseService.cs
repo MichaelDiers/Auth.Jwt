@@ -6,6 +6,7 @@
     using Auth.Jwt.Web.Contracts.Models;
     using Auth.Jwt.Web.Contracts.Models.Database;
     using Auth.Jwt.Web.Contracts.Services;
+    using Auth.Jwt.Web.Filters;
     using Auth.Jwt.Web.Models.Database;
 
     /// <summary>
@@ -54,7 +55,10 @@
                                 Roles.AuthAdmin),
                             new ClaimEntity(
                                 ClaimTypes.Name,
-                                "Admin")
+                                "Admin"),
+                            new ClaimEntity(
+                                EmailValidatedFilter.IsEmailValidatedClaimType,
+                                true.ToString())
                         })
                 }
             };
