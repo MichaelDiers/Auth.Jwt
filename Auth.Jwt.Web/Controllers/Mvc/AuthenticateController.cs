@@ -1,11 +1,14 @@
 ﻿namespace Auth.Jwt.Web.Controllers.Mvc
 {
     using System;
+    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Services;
     using Auth.Jwt.Web.Contracts.Settings;
     using Auth.Jwt.Web.Extensions;
     using Auth.Jwt.Web.Models.Requests;
+    using Auth.Jwt.Web.ViewModels.Authenticate;
     using Auth.Jwt.Web.ViewModels.SignIn;
     using Auth.Jwt.Web.ViewModels.SignUp;
     using Microsoft.AspNetCore.Http;
@@ -24,6 +27,11 @@
         ///     The automated user interface tests id of the sign up view.
         /// </summary>
         public const string SignUpViewAuit = nameof(AuthenticateController.SignUpViewAuit);
+
+        /// <summary>
+        ///     The automated user interface tests id of the validate email view.
+        /// </summary>
+        public const string ValidateEmailAuit = nameof(AuthenticateController.ValidateEmail);
 
         /// <summary>
         ///     Service for authenticating users.
@@ -144,7 +152,40 @@
         [HttpGet]
         public IActionResult ValidateEmail()
         {
-            return this.View();
+            this.SetAuit(AuthenticateController.ValidateEmailAuit);
+            var userName = this.User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
+            return this.View(new ValidateEmailViewModel {UserName = userName.Value});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidateEmailAsync(ValidateEmailViewModel viewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.SetAuit(AuthenticateController.ValidateEmailAuit);
+                return this.View(viewModel);
+            }
+
+            if (!this.User.HasClaim(
+                    ClaimTypes.NameIdentifier,
+                    viewModel.UserName.NormalizeUserName()))
+            {
+                return this.RedirectToAction(nameof(this.Logout));
+            }
+
+            var tokenResponse = await this.authenticationService.ValidateEmail(
+                new ValidateEmailRequest(
+                    viewModel.UserName,
+                    viewModel.ValidationCode));
+            if (string.IsNullOrWhiteSpace(tokenResponse.Token))
+            {
+                return this.RedirectToAction(nameof(this.Logout));
+            }
+
+            this.AddCookie(tokenResponse.Token);
+            return this.RedirectToAction(
+                nameof(UserController.Index),
+                nameof(UserController).ControllerName());
         }
 
         private void AddCookie(string value)

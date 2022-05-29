@@ -1,5 +1,6 @@
 ﻿namespace Auth.Jwt.Web.Services
 {
+    using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Auth.Jwt.Web.Contracts.Models;
@@ -7,6 +8,7 @@
     using Auth.Jwt.Web.Contracts.Models.Response;
     using Auth.Jwt.Web.Contracts.Services;
     using Auth.Jwt.Web.Extensions;
+    using Auth.Jwt.Web.Filters;
     using Auth.Jwt.Web.Models.Database;
     using Auth.Jwt.Web.Models.Responses;
 
@@ -79,9 +81,10 @@
                 return new TokenResponse();
             }
 
+            var userName = request.UserName.NormalizeUserName();
             user = new UserEntity(
-                request.UserName.NormalizeUserName(),
-                request.Password,
+                userName,
+                this.hashService.Hash(request.Password),
                 new[]
                 {
                     new ClaimEntity(
@@ -89,9 +92,43 @@
                         Roles.AuthUser),
                     new ClaimEntity(
                         ClaimTypes.Name,
-                        request.UserName)
-                });
+                        request.UserName),
+                    new ClaimEntity(
+                        ClaimTypes.NameIdentifier,
+                        userName),
+                    new ClaimEntity(
+                        EmailValidatedFilter.IsEmailValidatedClaimType,
+                        false.ToString())
+                },
+                userName);
             await this.databaseService.SetAsync(user);
+            var token = await this.jwtService.Create(user);
+            return new TokenResponse(token);
+        }
+
+        /// <summary>
+        ///     Validate the email of a user.
+        /// </summary>
+        /// <param name="request">The data of the request.</param>
+        /// <returns>A <see cref="Task{TResult}" /> whose result is an <see cref="ITokenResponse" />.</returns>
+        public async Task<ITokenResponse> ValidateEmail(IValidateEmailRequest request)
+        {
+            var user = await this.databaseService.GetAsync(request.UserName.NormalizeUserName());
+            if (user == null)
+            {
+                return new TokenResponse();
+            }
+
+            if (!user.EmailValidationCode.Equals(
+                    request.EmailValidationCode,
+                    StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new TokenResponse();
+            }
+
+            user.SetEmailIsValidated();
+            await this.databaseService.UpdateAsync(user);
+
             var token = await this.jwtService.Create(user);
             return new TokenResponse(token);
         }

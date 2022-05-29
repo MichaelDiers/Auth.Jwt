@@ -21,5 +21,12 @@
         /// <param name="entity">The entity that is added.</param>
         /// <returns>A <see cref="Task" /> that indicates termination.</returns>
         Task SetAsync(IUserEntity entity);
+
+        /// <summary>
+        ///     Update a user entity by replacing it.
+        /// </summary>
+        /// <param name="entity">The new entity data.</param>
+        /// <returns>A <see cref="Task" /> that indicates completion.</returns>
+        Task UpdateAsync(IUserEntity entity);
     }
 }

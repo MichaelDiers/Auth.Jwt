@@ -1,5 +1,6 @@
 ﻿namespace Auth.Jwt.Web.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -38,8 +39,15 @@
                                 Roles.AuthUser),
                             new ClaimEntity(
                                 ClaimTypes.Name,
-                                "UserName")
-                        })
+                                "UserName"),
+                            new ClaimEntity(
+                                ClaimTypes.NameIdentifier,
+                                "USERNAME"),
+                            new ClaimEntity(
+                                EmailValidatedFilter.IsEmailValidatedClaimType,
+                                true.ToString())
+                        },
+                        "USERNAME")
                 },
                 {
                     "ADMIN", new UserEntity(
@@ -57,9 +65,13 @@
                                 ClaimTypes.Name,
                                 "Admin"),
                             new ClaimEntity(
+                                ClaimTypes.NameIdentifier,
+                                "ADMIN"),
+                            new ClaimEntity(
                                 EmailValidatedFilter.IsEmailValidatedClaimType,
                                 true.ToString())
-                        })
+                        },
+                        "ADMIN")
                 }
             };
         }
@@ -86,10 +98,31 @@
         /// <returns>A <see cref="Task" /> that indicates termination.</returns>
         public async Task SetAsync(IUserEntity entity)
         {
-            await Task.CompletedTask;
+            var user = await this.GetAsync(entity.UserName);
+            if (user != null)
+            {
+                throw new Exception();
+            }
+
             this.users.Add(
                 entity.UserName,
                 entity);
+        }
+
+        /// <summary>
+        ///     Update a user entity by replacing it.
+        /// </summary>
+        /// <param name="entity">The new entity data.</param>
+        /// <returns>A <see cref="Task" /> that indicates completion.</returns>
+        public async Task UpdateAsync(IUserEntity entity)
+        {
+            var user = await this.GetAsync(entity.UserName);
+            if (user == null)
+            {
+                throw new Exception();
+            }
+
+            this.users[entity.UserName] = entity;
         }
     }
 }
