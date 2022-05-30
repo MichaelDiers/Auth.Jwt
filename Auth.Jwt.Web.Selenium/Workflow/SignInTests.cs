@@ -1,6 +1,5 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Workflow
 {
-    using System;
     using Auth.Jwt.Web.Selenium.Pages;
     using OpenQA.Selenium;
     using Xunit;
@@ -8,66 +7,90 @@
     public class SignInTests : TestBase
     {
         [Theory]
-        [ClassData(typeof(TestDataGenerator))]
-        public void LogoutNotVisibleOnSignIn(TestData testData)
+        [MemberData(
+            nameof(TestDataGenerator.TestData),
+            MemberType = typeof(TestDataGenerator),
+            DisableDiscoveryEnumeration = true)]
+        public void LinkFromSignInToSignUp(string driverName)
         {
-            var driver = this.Init(testData);
+            var (_, driver) = this.Init(
+                driverName,
+                false,
+                false);
 
-            SignInPage.Create(driver);
-            var thrown = false;
-            try
-            {
-                driver.FindElement(By.Id("logout"));
-            }
-            catch (NoSuchElementException)
-            {
-                thrown = true;
-            }
-
-            Assert.True(thrown);
+            StartPage.ToSignInPage(driver).ClickSignUpLink();
         }
 
         [Theory]
-        [ClassData(typeof(TestDataGenerator))]
-        public void SignInFail(TestData testData)
+        [MemberData(
+            nameof(TestDataGenerator.TestData),
+            MemberType = typeof(TestDataGenerator),
+            DisableDiscoveryEnumeration = true)]
+        public void SignInFailsUsingInvalidPassword(string driverName)
         {
-            var driver = this.Init(testData);
+            var (testData, driver) = this.Init(
+                driverName,
+                true,
+                false);
 
-            SignInPage.Create(driver)
-                .SignIn(
-                    Guid.NewGuid().ToString(),
-                    Guid.NewGuid().ToString())
-                .VerifyOnPage();
+            StartPage.ToSignInPage(driver)
+                .UserName(testData.UserName)
+                .Password($"{testData.Password}a")
+                .SubmitFails(By.CssSelector(".validation-summary-errors"));
         }
 
         [Theory]
-        [ClassData(typeof(TestDataGenerator))]
-        public void SignInSuccess(TestData testData)
+        [MemberData(
+            nameof(TestDataGenerator.TestData),
+            MemberType = typeof(TestDataGenerator),
+            DisableDiscoveryEnumeration = true)]
+        public void SignInFailsUsingUnknownUser(string driverName)
         {
-            var driver = this.Init(testData);
+            var (testData, driver) = this.Init(
+                driverName,
+                false,
+                false);
 
-            SignInPage.Create(driver)
-            .SignIn(
-                testData.UserName,
-                testData.Password);
-            UserIndexPage.Create(driver);
+            StartPage.ToSignInPage(driver)
+                .UserName(testData.UserName)
+                .Password(testData.Password)
+                .SubmitFails(By.CssSelector(".validation-summary-errors"));
         }
 
         [Theory]
-        [ClassData(typeof(TestDataGenerator))]
-        public void SwitchToSignUp(TestData testData)
+        [MemberData(
+            nameof(TestDataGenerator.TestData),
+            MemberType = typeof(TestDataGenerator),
+            DisableDiscoveryEnumeration = true)]
+        public void SignInUsingValidatedEmail(string driverName)
         {
-            var driver = this.Init(testData);
+            var (testData, driver) = this.Init(
+                driverName,
+                true,
+                true);
 
-            SignInPage.Create(driver).ToSignUpIndexPage();
+            StartPage.ToSignInPage(driver)
+                .UserName(testData.UserName)
+                .Password(testData.Password)
+                .SubmitSuccess(UserIndexPage.Create);
         }
 
         [Theory]
-        [ClassData(typeof(TestDataGenerator))]
-        public void VerifyStartPage(TestData testData)
+        [MemberData(
+            nameof(TestDataGenerator.TestData),
+            MemberType = typeof(TestDataGenerator),
+            DisableDiscoveryEnumeration = true)]
+        public void SignInWithUnvalidatedEmail(string driverName)
         {
-            var driver = this.Init(testData);
-            SignInPage.Create(driver);
+            var (testData, driver) = this.Init(
+                driverName,
+                true,
+                false);
+
+            StartPage.ToSignInPage(driver)
+                .UserName(testData.UserName)
+                .Password(testData.Password)
+                .SubmitSuccess(ValidateEmailPage.Create);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Auth.Jwt.Web.Selenium.Pages
 {
+    using System;
     using Auth.Jwt.Web.Controllers.Mvc;
     using OpenQA.Selenium;
 
@@ -17,6 +18,16 @@
                 driver,
                 AuthenticateController.SignInViewAuit)
         {
+        }
+
+        /// <summary>
+        ///     Use a link to the <see cref="SignUpIndexPage" />.
+        /// </summary>
+        /// <returns>A new <see cref="SignUpIndexPage" />.</returns>
+        public SignUpIndexPage ClickSignUpLink()
+        {
+            this.Click(By.CssSelector("main form ~ a"));
+            return this.Create(SignUpIndexPage.Create);
         }
 
         /// <summary>
@@ -44,34 +55,24 @@
         }
 
         /// <summary>
-        ///     Sign in with user name and password.
+        ///     Submit the form data.
         /// </summary>
-        /// <param name="userName">The text that is set as user name.</param>
-        /// <param name="password">The text that is set as password.</param>
         /// <returns>A self reference.</returns>
-        public SignInPage SignIn(string userName, string password)
+        public SignInPage SubmitFails(By errorMessage)
         {
-            return this.UserName(userName).Password(password).Submit();
+            this.Submit(By.CssSelector("input[type=submit]"));
+            this.IsDisplayed(errorMessage);
+            return this;
         }
 
         /// <summary>
         ///     Submit the form data.
         /// </summary>
-        /// <returns>A self reference.</returns>
-        public SignInPage Submit()
+        /// <returns>The destination page.</returns>
+        public T SubmitSuccess<T>(Func<IWebDriver, T> create)
         {
             this.Submit(By.CssSelector("input[type=submit]"));
-            return this;
-        }
-
-        /// <summary>
-        ///     Use a link to the <see cref="SignUpIndexPage" />.
-        /// </summary>
-        /// <returns>A new <see cref="SignUpIndexPage" />.</returns>
-        public SignUpIndexPage ToSignUpIndexPage()
-        {
-            this.Click(By.CssSelector("main form ~ a"));
-            return this.Create(SignUpIndexPage.Create);
+            return this.Create(create);
         }
 
         /// <summary>

@@ -1,11 +1,9 @@
 ﻿namespace Auth.Jwt.Web.Selenium
 {
-    using OpenQA.Selenium;
-
     public class TestData
     {
         public TestData(
-            IWebDriver driver,
+            string driver,
             string userName,
             string password,
             string url
@@ -17,7 +15,7 @@
             this.Password = password;
         }
 
-        public IWebDriver Driver { get; }
+        public string Driver { get; }
         public string Password { get; }
         public string Url { get; }
         public string UserName { get; }

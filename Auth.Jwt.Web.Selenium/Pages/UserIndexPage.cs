@@ -30,6 +30,12 @@
             return new UserIndexPage(driver).VerifyOnPage();
         }
 
+        public SignInPage Logout()
+        {
+            this.Click(By.Id("logout"));
+            return this.Create(SignInPage.Create);
+        }
+
         /// <summary>
         ///     Verify that the current page is displayed.
         /// </summary>

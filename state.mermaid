@@ -1,0 +1,15 @@
+stateDiagram-v2
+    [*] --> Home 
+    Home --> SignIn: redirect
+    SignIn --> SignUp: link
+    SignUp --> SignIn: link
+    SignUp --> SignUp: fail 
+    SignUp --> VerifyEmail: success
+    SignIn --> SignIn: fail
+    SignIn --> VerifyEmail: success
+    SignIn --> User: success
+    VerifyEmail --> SignIn: logout
+    VerifyEmail --> VerifyEmail: fail
+    VerifyEmail --> User: success
+    User --> SignIn: logout
+    User --> [*] 

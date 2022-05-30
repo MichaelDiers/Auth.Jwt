@@ -18,6 +18,16 @@
         }
 
         /// <summary>
+        ///     Use the link to the sign in page.
+        /// </summary>
+        /// <returns>A new <see cref="SignInPage" />.</returns>
+        public SignInPage ClickSignInLink()
+        {
+            this.Click(By.CssSelector("main form ~ a"));
+            return this.Create(SignInPage.Create);
+        }
+
+        /// <summary>
         ///     Create a new instance of the <see cref="SignUpIndexPage" />
         ///     and verify the page is displayed.
         /// </summary>
@@ -76,14 +86,17 @@
             return this;
         }
 
-        /// <summary>
-        ///     Use the link to the sign in page.
-        /// </summary>
-        /// <returns>A new <see cref="SignInPage" />.</returns>
-        public SignInPage ToSignInPage()
+        public SignUpIndexPage SubmitFail(By errorMessage)
         {
-            this.Click(By.CssSelector("main form ~ a"));
-            return this.Create(SignInPage.Create);
+            this.Submit(By.CssSelector("input[type=submit]"));
+            this.IsDisplayed(errorMessage);
+            return this;
+        }
+
+        public ValidateEmailPage SubmitSuccess()
+        {
+            this.Submit(By.CssSelector("input[type=submit]"));
+            return this.Create(ValidateEmailPage.Create);
         }
 
         /// <summary>
