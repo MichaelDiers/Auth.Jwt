@@ -16,7 +16,7 @@
     <input asp-for='PasswordRepeat' />
     <span asp-validation-for='PasswordRepeat'></span>
     <input type='submit'
-           value='submit' />
+           value='@localizer["Submit"]' />
 </form>
 <a asp-action='SignIn'>
     @localizer["SignIn"]

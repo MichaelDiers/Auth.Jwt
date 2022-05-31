@@ -1,7 +1,9 @@
 ﻿@model Auth.Jwt.Web.ViewModels.Authenticate.ValidateEmailViewModel
+@inject IViewLocalizer localizer
 @{
+    ViewData["Title"] = localizer["Title"];
 }
-<h1>Validate Email</h1>
+<h1>@localizer["Headline"]</h1>
 <form method='post'>
     <input asp-for='UserName'
            type='hidden' />
@@ -9,5 +11,5 @@
     <input asp-for='ValidationCode' />
     <span asp-validation-for='ValidationCode'></span>
     <input type='submit'
-           value='submit' />
+           value='@localizer["Submit"]' />
 </form>

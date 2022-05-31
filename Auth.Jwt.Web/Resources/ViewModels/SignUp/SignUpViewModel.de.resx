@@ -129,7 +129,7 @@
   <data name="PasswordRepeat" xml:space="preserve">
     <value>Passwort Wiederholung</value>
   </data>
-  <data name="PasswortRepeat" xml:space="preserve">
+  <data name="PasswordRepeatPrompt" xml:space="preserve">
     <value>Passwort Wiederholung</value>
   </data>
   <data name="RequiredAttribute" xml:space="preserve">
